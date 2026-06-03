@@ -110,13 +110,15 @@
   @keyframes navIn { to { opacity: 1; } }
   .nav.scrolled { border-color: var(--line); background: rgba(245,241,234,.9); }
   .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 76px; }
-  .brand { display: flex; align-items: center; gap: 12px; }
-  .brand img { width: 38px; height: 38px; object-fit: contain; }
+  .brand { display: flex; align-items: center; gap: 13px; }
+  .brand__mark { display: inline-flex; }
+  .brand img { width: 42px; height: 42px; object-fit: contain; }
+  .brand__text { display: flex; flex-direction: column; padding-left: 13px; border-left: 1px solid var(--line); }
   .brand__name {
-    font-family: var(--sans); font-weight: 600; font-size: 15px;
-    letter-spacing: .34em; text-transform: uppercase;
+    font-family: var(--display); font-weight: 600; font-size: 19px; line-height: 1;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
   }
-  .brand__sub { display:block; font-size: 8.5px; letter-spacing:.28em; color: var(--muted); margin-top: 2px; font-weight: 500; }
+  .brand__sub { font-size: 8.5px; letter-spacing: .2em; color: var(--muted); margin-top: 5px; font-weight: 600; text-transform: uppercase; }
   .nav__links { display: flex; align-items: center; gap: 36px; }
   .nav__links a {
     font-size: 14px; color: var(--ink-soft); font-weight: 500;
@@ -330,6 +332,33 @@
   .tcard__author span { color: var(--muted); font-size: 13px; }
 
   /* ============================================================
+     3 · HOW IT WORKS (process)
+     ============================================================ */
+  .process { padding-block: var(--section-y); text-align: center; }
+  .process__head { max-width: 660px; margin: 0 auto clamp(48px, 7vw, 74px); }
+  .process__head h2 { font-size: clamp(32px, 4.4vw, 52px); margin-top: 18px; }
+  .process__head p { color: var(--ink-soft); margin-top: 18px; font-size: 17px; }
+  .process__steps {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; text-align: left;
+  }
+  .pstep {
+    position: relative; background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 38px 30px 32px;
+    transition: transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
+  }
+  .pstep:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: #d8cfbf; }
+  .pstep__num { font-family: var(--display); font-weight: 600; font-size: 15px; color: var(--accent); letter-spacing: .12em; }
+  .pstep__icon {
+    width: 54px; height: 54px; border-radius: 15px; display: grid; place-items: center;
+    background: rgba(169,113,75,.1); color: var(--accent-deep); margin: 18px 0 22px;
+  }
+  .pstep__icon svg { width: 26px; height: 26px; }
+  .pstep h3 { font-size: 23px; }
+  .pstep p { color: var(--ink-soft); margin-top: 12px; font-size: 15.5px; }
+  .process__cta { margin-top: clamp(40px, 6vw, 60px); display: flex; justify-content: center; }
+
+  /* ============================================================
      CTA band
      ============================================================ */
   .cta { padding-block: 96px; }
@@ -485,6 +514,7 @@
       padding: 28px var(--gutter);
     }
     .intro__grid, .tst__grid { grid-template-columns: 1fr; gap: 40px; }
+    .process__steps { grid-template-columns: 1fr; }
     .intro__media { aspect-ratio: 16/12; max-height: 460px; }
     .bento { grid-template-columns: repeat(2, 1fr); }
     .bcard--wide { grid-column: span 2; }
@@ -558,17 +588,17 @@
 <!-- ====================== NAV ====================== -->
 <header class="nav" id="nav">
   <div class="container nav__inner">
-    <a class="brand" href="#top" aria-label="ABDIN home">
-      <img src="finalized%20logo.png" alt="ABDIN logo" />
-      <span>
-        <span class="brand__name">ABDIN</span>
-        <span class="brand__sub">Auto Seats · Upholstery</span>
+    <a class="brand" href="#top" aria-label="Abdin Auto Seats Upholstery L.L.C — home">
+      <span class="brand__mark"><img src="finalized%20logo.png" alt="Abdin Auto Seats Upholstery logo" /></span>
+      <span class="brand__text">
+        <span class="brand__name">Abdin</span>
+        <span class="brand__sub">Auto Seats&nbsp;Upholstery&nbsp;·&nbsp;L.L.C</span>
       </span>
     </a>
     <nav class="nav__links" aria-label="Primary">
       <a href="#work">Our Craft</a>
       <a href="#services">Services</a>
-      <a href="#testimonials">Clients</a>
+      <a href="#process">How it works</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav__cta">
@@ -722,22 +752,49 @@
     </div>
   </section>
 
-  <!-- ====================== 3 · TESTIMONIALS ====================== -->
-  <section class="testimonials container" id="testimonials">
-    <div class="tst__grid">
-      <div class="tst__copy">
-        <span class="eyebrow reveal">Word of mouth</span>
-        <h2 class="reveal">Trusted by drivers and families alike.</h2>
-        <p class="reveal">The work speaks for itself — but our clients are happy to as well. A few of the people who've trusted ABDIN with their interiors.</p>
-        <div class="tst__hint reveal">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          Drag a card aside to read the next one
-        </div>
-      </div>
+  <!-- ====================== 3 · HOW IT WORKS ====================== -->
+  <section class="process container" id="process">
+    <div class="process__head reveal">
+      <span class="eyebrow" style="justify-content:center">Simple &amp; honest</span>
+      <h2>From a photo to a finished interior —<br/>in three easy steps.</h2>
+      <p>No showroom visit needed to begin. Message us, get an honest price, and we take care of the rest.</p>
+    </div>
 
-      <div class="tst__stage" id="tstStage" aria-label="Customer testimonials">
-        <!-- cards injected by JS -->
-      </div>
+    <ol class="process__steps">
+      <li class="pstep reveal">
+        <span class="pstep__num">01</span>
+        <span class="pstep__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3.5"/></svg>
+        </span>
+        <h3>Send a photo</h3>
+        <p>Message us on WhatsApp with a photo of your seats and a few details. It takes a minute.</p>
+      </li>
+      <li class="pstep reveal d1">
+        <span class="pstep__num">02</span>
+        <span class="pstep__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <h3>Get a fixed price</h3>
+        <p>We assess it honestly and send a clear, fixed quote — usually the same day. No surprises.</p>
+      </li>
+      <li class="pstep reveal d2">
+        <span class="pstep__num">03</span>
+        <span class="pstep__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17.5" cy="18" r="1.8"/></svg>
+        </span>
+        <h3>We restore &amp; return</h3>
+        <p>We collect, re-trim it by hand, and deliver it back looking and feeling better than new.</p>
+      </li>
+    </ol>
+
+    <div class="process__cta reveal">
+      <a class="wa-cta" href="https://wa.me/971556282836" target="_blank" rel="noopener" aria-label="Send a photo to ABDIN on WhatsApp">
+        <span class="wa-cta__ring" aria-hidden="true"></span>
+        <span class="wa-cta__inner">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0a12 12 0 0 0-10 18.5L0 24l5.7-1.9A12 12 0 1 0 12 0zm0 21.8a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.4 1 1-3.3-.2-.4A9.8 9.8 0 1 1 12 21.8zm5.4-7.3c-.3-.1-1.8-.9-2-1s-.5-.1-.7.2-.8 1-.9 1.1-.4.2-.7 0a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.6.3-.5a.5.5 0 0 0 0-.5L8.8 6.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3A2.9 2.9 0 0 0 6 9c0 1.8 1.3 3.5 1.5 3.7a14.5 14.5 0 0 0 5.5 4.9c2 .8 2 .5 2.4.5a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .2-1.2c-.1-.1-.3-.2-.6-.3z"/></svg>
+          Send a photo on WhatsApp
+        </span>
+      </a>
     </div>
   </section>
 
@@ -870,67 +927,6 @@
     }, { threshold: 0.15 });
     vio.observe(heroSection);
   }
-
-  /* ---------- testimonials: draggable shuffle stack (component 3 intent) ---------- */
-  const testimonials = [
-    { quote: "They re-trimmed both front seats of my Land Cruiser in matched leather — you genuinely cannot tell it isn't factory.", name: "Khalid A.", role: "Toyota Land Cruiser owner", img: "https://i.pravatar.cc/160?img=12" },
-    { quote: "Our majlis looked brand new. New foam, new fabric, picked up and delivered. Faultless from start to finish.", name: "Mariam S.", role: "Homeowner, Al Barsha", img: "https://i.pravatar.cc/160?img=32" },
-    { quote: "A worn driver's seat bolster fixed in a day for a fair price. Honest people, proper craftsmanship.", name: "Devin R.", role: "Mercedes E-Class owner", img: "https://i.pravatar.cc/160?img=15" },
-  ];
-  const stage = document.getElementById('tstStage');
-  let order = testimonials.map((_, i) => i);
-
-  function layout() {
-    stage.innerHTML = '';
-    order.forEach((idx, pos) => {
-      const t = testimonials[idx];
-      const card = document.createElement('article');
-      card.className = 'tcard';
-      const depth = order.length - 1 - pos; // 0 = front
-      card.style.zIndex = String(10 + pos);
-      const rot = depth === 0 ? 0 : (depth % 2 === 0 ? 5 : -5) * depth;
-      const ty = depth * 14;
-      const sc = 1 - depth * 0.04;
-      card.style.transform = `translateY(${ty}px) rotate(${rot}deg) scale(${sc})`;
-      card.dataset.base = card.style.transform;
-      card.innerHTML = `
-        <img class="tcard__avatar" src="${t.img}" alt="${t.name}" />
-        <div class="tcard__stars">★★★★★</div>
-        <p class="tcard__quote">“${t.quote}”</p>
-        <div class="tcard__author"><b>${t.name}</b><span>${t.role}</span></div>`;
-      if (pos === order.length - 1) makeDraggable(card);
-      stage.appendChild(card);
-    });
-  }
-
-  function shuffle() { order.unshift(order.pop()); layout(); }
-
-  function makeDraggable(card) {
-    card.style.cursor = 'grab';
-    let startX = 0, dx = 0, active = false;
-    const down = (e) => {
-      active = true; startX = (e.touches ? e.touches[0].clientX : e.clientX);
-      card.classList.add('dragging');
-      window.addEventListener('pointermove', move);
-      window.addEventListener('pointerup', up);
-    };
-    const move = (e) => {
-      if (!active) return;
-      dx = (e.touches ? e.touches[0].clientX : e.clientX) - startX;
-      card.style.transform = `translateX(${dx}px) rotate(${dx * 0.04}deg)`;
-      card.style.opacity = String(Math.max(0, 1 - Math.abs(dx) / 420));
-    };
-    const up = () => {
-      active = false; card.classList.remove('dragging');
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-      if (Math.abs(dx) > 130) { shuffle(); }
-      else { card.style.transform = card.dataset.base; card.style.opacity = '1'; }
-      dx = 0;
-    };
-    card.addEventListener('pointerdown', down);
-  }
-  layout();
 
   /* ---------- car-seat intro (once per session, then reveal) ---------- */
   (function () {
