@@ -142,16 +142,19 @@
     padding: 120px 0 90px;
   }
   .hero__bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
-  /* the source clip is a landscape shot stored sideways — rotate it upright.
-     width/height are swapped (100vh / 100vw) so the rotated frame fills the screen. */
+  /* upright 9:16 portrait clip — standard full-bleed cover (fills mobile perfectly) */
   .hero__video {
-    position: absolute; top: 50%; left: 50%;
-    width: 100vh; height: 100vw; object-fit: cover;
-    transform: translate(-50%, -50%) rotate(-90deg) scale(1.08);
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover; object-position: center;
+    transform: scale(1.06); transform-origin: center;
     opacity: 0; will-change: transform, opacity;
-    transition: opacity 1.2s var(--ease), transform 1.4s var(--ease);
+    transition: opacity 1.2s var(--ease), transform 1.6s var(--ease);
   }
-  .hero__video.playing { opacity: 1; transform: translate(-50%, -50%) rotate(-90deg) scale(1); }
+  .hero__video.playing { opacity: 1; transform: scale(1); }
+  /* If this clip ever appears sideways, uncomment to rotate:
+     .hero__video { width: 100vh; height: 100vw; top: 50%; left: 50%;
+       transform: translate(-50%,-50%) rotate(-90deg) scale(1.06); }
+     .hero__video.playing { transform: translate(-50%,-50%) rotate(-90deg) scale(1); } */
   .hero__scrim {
     position: absolute; inset: 0; z-index: 1;
     background: linear-gradient(to bottom, rgba(10,9,8,.5), rgba(10,9,8,.3) 38%, rgba(10,9,8,.9));
@@ -503,23 +506,12 @@
 
   /* ---------- portrait / mobile: show the FULL landscape clip (no crop) ---------- */
   @media (max-width: 820px) {
-    .hero { justify-content: flex-end; padding-top: 88px; padding-bottom: 12vh; }
-    /* element is 56.25vw x 100vw; rotated -90deg it becomes 100vw wide x 56.25vw tall
-       — exactly the clip's 16:9, so the whole car shows with nothing cropped. */
-    .hero__video,
-    .hero__video.playing {
-      width: 56.25vw; height: 100vw; top: 30%; left: 50%;
-      object-position: center;
-      transform: translate(-50%, -50%) rotate(-90deg) scale(1);
-    }
-    /* keep the car bright up top, deepen toward the headline for clean contrast */
+    .hero { padding-top: 96px; }
+    /* portrait clip fills the phone screen; deepen the scrim for legible text */
     .hero__scrim {
-      background:
-        radial-gradient(120% 60% at 50% 30%, transparent 40%, rgba(10,9,8,.35) 100%),
-        linear-gradient(to bottom, rgba(10,9,8,.5), rgba(10,9,8,.1) 28%, rgba(10,9,8,.74) 58%, rgba(10,9,8,.97));
+      background: linear-gradient(to bottom, rgba(10,9,8,.5), rgba(10,9,8,.28) 34%, rgba(10,9,8,.6) 70%, rgba(10,9,8,.94));
     }
     .hero h1 { font-size: clamp(40px, 11vw, 60px); }
-    .hero__sub { font-size: 16px; }
     .hero__stats { margin-top: 40px; gap: 30px; }
     .stat__num { font-size: 32px; }
   }
@@ -529,7 +521,7 @@
     .reveal { opacity: 1; transform: none; }
     .nav { opacity: 1; animation: none; }
     .intro__video { opacity: 1; transform: none; transition: none; }
-    .hero__video { opacity: 1; transition: none; transform: translate(-50%, -50%) rotate(-90deg) scale(1); }
+    .hero__video { opacity: 1; transition: none; transform: scale(1); }
     .hero__cue span { animation: none; }
     .wa-cta__ring::before,
     .wa-icon::before, .wa-icon::after { animation: none; }
@@ -595,7 +587,7 @@
   <section class="hero" id="hero">
     <div class="hero__bg" aria-hidden="true">
       <video class="hero__video" id="heroVideo"
-             src="assets/videos/craft.mp4"
+             src="assets/videos/hero.mp4"
              autoplay muted loop playsinline preload="auto"
              webkit-playsinline="true" x5-playsinline="true"></video>
     </div>
