@@ -381,30 +381,29 @@
   }
   .intro-loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
   .intro-loader__inner { display: flex; flex-direction: column; align-items: center; gap: 30px; }
-  .car { width: clamp(230px, 52vw, 380px); height: auto; color: var(--accent-soft); overflow: visible; }
-  .car-line {
-    fill: none; stroke: currentColor; stroke-width: 2.4;
+  .seat { width: clamp(120px, 25vw, 184px); height: auto; color: var(--accent-soft); overflow: visible; }
+  .seat-line {
+    fill: none; stroke: currentColor; stroke-width: 2.6;
     stroke-linecap: round; stroke-linejoin: round;
     stroke-dasharray: 1; stroke-dashoffset: 1;
   }
-  .car-body  { animation: carDraw 1.7s var(--ease) .25s forwards; }
-  .car-wheel { animation: carDraw .8s var(--ease) 1.15s forwards; }
-  .car-belt  { stroke-width: 1.6; opacity: .7; animation: carDraw .6s var(--ease) 1.45s forwards; }
-  .car-hub   { fill: var(--accent-soft); opacity: 0; animation: carFade .5s var(--ease) 1.7s forwards; }
-  .car-head  { fill: #ffe7c2; opacity: 0; filter: drop-shadow(0 0 8px #ffd28a); animation: carHead .9s var(--ease) 1.75s forwards; }
-  .car-shadow{ fill: rgba(216,171,126,.16); filter: blur(7px); opacity: 0; animation: carFade .9s ease 1.5s forwards; }
-  .car-shine {
+  .seat-outline { animation: seatDraw 1.7s var(--ease) .25s forwards; }
+  .seat-stitch {
+    fill: none; stroke: var(--accent); stroke-width: 1.5;
+    stroke-linecap: round; stroke-dasharray: 2 8; opacity: 0;
+    animation: stitchIn .7s var(--ease) 1.5s forwards;
+  }
+  .seat-shine {
     fill: none; stroke: #fff6e8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
     stroke-dasharray: 0.07 0.93; stroke-dashoffset: 1; opacity: 0;
-    animation: carShine 1.5s linear 1.95s forwards;
+    animation: seatShine 1.5s linear 2s forwards;
   }
-  .intro-name { text-align: center; opacity: 0; animation: nameUp .9s var(--ease) 2.15s forwards; }
+  .intro-name { text-align: center; opacity: 0; animation: nameUp .9s var(--ease) 2.2s forwards; }
   .in-title { display: block; font-family: var(--display); font-weight: 500; font-size: clamp(30px, 6vw, 50px); letter-spacing: .16em; color: var(--paper); }
   .in-sub { display: block; margin-top: 8px; font-size: 11px; letter-spacing: .34em; text-transform: uppercase; color: var(--accent-soft); }
-  @keyframes carDraw { to { stroke-dashoffset: 0; } }
-  @keyframes carFade { to { opacity: 1; } }
-  @keyframes carHead { 0% { opacity: 0; } 45% { opacity: 1; } 100% { opacity: .92; } }
-  @keyframes carShine { 0% { opacity: 0; stroke-dashoffset: 1; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; stroke-dashoffset: 0; } }
+  @keyframes seatDraw { to { stroke-dashoffset: 0; } }
+  @keyframes stitchIn { to { opacity: .7; } }
+  @keyframes seatShine { 0% { opacity: 0; stroke-dashoffset: 1; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; stroke-dashoffset: 0; } }
   @keyframes nameUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
   .intro-loader__brand { text-align: center; color: var(--paper); opacity: 0; animation: ilFade 1s var(--ease) .75s both; }
   .il-name { display: block; font-family: var(--display); font-weight: 500; font-size: clamp(32px, 6vw, 54px); letter-spacing: .14em; }
@@ -534,9 +533,9 @@
     .hero__cue span { animation: none; }
     .wa-cta__ring::before,
     .wa-icon::before, .wa-icon::after { animation: none; }
-    .car-line { animation: none; stroke-dashoffset: 0; }
-    .car-shine { animation: none; opacity: 0; }
-    .car-head, .car-hub, .car-shadow { animation: none; opacity: 1; }
+    .seat-line { animation: none; stroke-dashoffset: 0; }
+    .seat-stitch { animation: none; opacity: .7; }
+    .seat-shine { animation: none; opacity: 0; }
     .intro-name { animation: none; opacity: 1; }
     .brand img, .footer__brand img { animation: none; filter: drop-shadow(0 0 8px rgba(216,171,126,.5)); }
     * { scroll-behavior: auto; }
@@ -548,20 +547,19 @@
 <!-- ====================== INTRO LOADER (car seat draws in) ====================== -->
 <div class="intro-loader" id="introLoader" role="presentation">
   <div class="intro-loader__inner">
-    <svg class="car" viewBox="0 0 400 200" fill="none" aria-hidden="true">
-      <ellipse class="car-shadow" cx="200" cy="181" rx="150" ry="9"/>
-      <path class="car-line car-body" pathLength="1" d="M46 150 L40 134 Q40 120 58 116 L118 110 Q134 108 148 94 L176 72 Q182 68 194 68 L250 68 Q266 68 276 82 L298 110 L342 114 Q358 116 358 130 L354 150 Z"/>
-      <path class="car-line car-belt" pathLength="1" d="M150 96 L296 110"/>
-      <circle class="car-line car-wheel" pathLength="1" cx="116" cy="150" r="26"/>
-      <circle class="car-line car-wheel" pathLength="1" cx="300" cy="150" r="26"/>
-      <circle class="car-hub" cx="116" cy="150" r="7"/>
-      <circle class="car-hub" cx="300" cy="150" r="7"/>
-      <circle class="car-head" cx="52" cy="126" r="4.5"/>
-      <path class="car-shine" pathLength="1" d="M46 150 L40 134 Q40 120 58 116 L118 110 Q134 108 148 94 L176 72 Q182 68 194 68 L250 68 Q266 68 276 82 L298 110 L342 114 Q358 116 358 130 L354 150 Z"/>
+    <svg class="seat" viewBox="0 0 200 240" fill="none" aria-hidden="true">
+      <!-- bucket car-seat outline (echoes the ABDIN logo) -->
+      <path class="seat-line seat-outline" pathLength="1" d="M100 30 C90 30 84 36 84 48 C84 56 80 60 70 66 C56 74 50 80 50 96 C50 116 72 128 72 150 C72 172 54 186 54 200 C54 210 70 216 100 216 C130 216 146 210 146 200 C146 186 128 172 128 150 C128 128 150 116 150 96 C150 80 144 74 130 66 C120 60 116 56 116 48 C116 36 110 30 100 30 Z"/>
+      <!-- upholstery stitching -->
+      <path class="seat-stitch" d="M100 58 L100 206"/>
+      <path class="seat-stitch" d="M82 76 L82 196"/>
+      <path class="seat-stitch" d="M118 76 L118 196"/>
+      <!-- glint sweep -->
+      <path class="seat-shine" pathLength="1" d="M100 30 C90 30 84 36 84 48 C84 56 80 60 70 66 C56 74 50 80 50 96 C50 116 72 128 72 150 C72 172 54 186 54 200 C54 210 70 216 100 216 C130 216 146 210 146 200 C146 186 128 172 128 150 C128 128 150 116 150 96 C150 80 144 74 130 66 C120 60 116 56 116 48 C116 36 110 30 100 30 Z"/>
     </svg>
     <div class="intro-name">
       <span class="in-title">ABDIN</span>
-      <span class="in-sub">Auto Seats · Upholstery</span>
+      <span class="in-sub">Auto Seat Upholstery</span>
     </div>
   </div>
 </div>
@@ -603,8 +601,8 @@
     </div>
     <div class="hero__scrim" aria-hidden="true"></div>
     <div class="container hero__head">
-      <span class="eyebrow reveal">Bespoke upholstery · Est. since 2009</span>
-      <h1 class="reveal d1">Interiors, <em>re-made</em><br/>by hand.</h1>
+      <span class="eyebrow reveal">Bespoke Auto-Seat Upholstery · Since 2009</span>
+      <h1 class="reveal d1">Car interiors,<br/><em>re-made</em> by hand.</h1>
       <div class="hero__actions reveal d3">
         <a href="#services" class="btn btn-primary">
           See our work
