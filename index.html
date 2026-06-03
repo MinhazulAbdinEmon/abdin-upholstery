@@ -373,7 +373,8 @@
   /* ---------- car-seat intro loader: logo draws itself in (first visit of the session) ---------- */
   .intro-loader {
     position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
-    background: #0c0b0a; transition: opacity .8s var(--ease), visibility .8s;
+    background: radial-gradient(circle at 50% 44%, rgba(216,171,126,.12), #0c0b0a 58%);
+    transition: opacity .8s var(--ease), visibility .8s;
   }
   .intro-loader.done { opacity: 0; visibility: hidden; }
   .intro-loader__inner { display: flex; flex-direction: column; align-items: center; gap: 30px; }
@@ -382,7 +383,6 @@
     fill: none; stroke: currentColor; stroke-width: 2.4;
     stroke-linecap: round; stroke-linejoin: round;
     stroke-dasharray: 1; stroke-dashoffset: 1;
-    filter: drop-shadow(0 0 5px rgba(216,171,126,.45));
   }
   .car-body  { animation: carDraw 1.7s var(--ease) .25s forwards; }
   .car-wheel { animation: carDraw .8s var(--ease) 1.15s forwards; }
@@ -393,7 +393,6 @@
   .car-shine {
     fill: none; stroke: #fff6e8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
     stroke-dasharray: 0.07 0.93; stroke-dashoffset: 1; opacity: 0;
-    filter: drop-shadow(0 0 6px #fff);
     animation: carShine 1.5s linear 1.95s forwards;
   }
   .intro-name { text-align: center; opacity: 0; animation: nameUp .9s var(--ease) 2.15s forwards; }
@@ -596,7 +595,8 @@
     <div class="hero__bg" aria-hidden="true">
       <video class="hero__video" id="heroVideo"
              src="assets/videos/craft.mp4"
-             muted loop playsinline preload="auto"></video>
+             autoplay muted loop playsinline preload="auto"
+             webkit-playsinline="true" x5-playsinline="true"></video>
     </div>
     <div class="hero__scrim" aria-hidden="true"></div>
     <div class="container hero__head">
@@ -861,16 +861,17 @@
   const heroVideo = document.getElementById('heroVideo');
   const heroSection = document.getElementById('hero');
   if (heroVideo && heroSection) {
+    const show = () => heroVideo.classList.add('playing');   // fade-in once a frame is ready
+    const tryPlay = () => { const p = heroVideo.play(); if (p && p.catch) p.catch(() => {}); };
+    heroVideo.addEventListener('loadeddata', show);
+    heroVideo.addEventListener('playing', show);
+    tryPlay();                                               // kick playback on mobile too
     const vio = new IntersectionObserver((entries) => {
       entries.forEach(en => {
-        if (en.isIntersecting) {
-          heroVideo.classList.add('playing');           // fade + scale-in (kept once shown)
-          const p = heroVideo.play(); if (p && p.catch) p.catch(() => {});
-        } else {
-          heroVideo.pause();
-        }
+        if (en.isIntersecting) { show(); tryPlay(); }
+        else { heroVideo.pause(); }
       });
-    }, { threshold: 0.25 });
+    }, { threshold: 0.15 });
     vio.observe(heroSection);
   }
 
