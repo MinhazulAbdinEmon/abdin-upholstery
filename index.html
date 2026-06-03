@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
 <style>
   /* ============================================================
      DESIGN TOKENS — one system for the whole site
@@ -545,6 +546,37 @@
     .stat__num { font-size: 32px; }
   }
 
+  /* ============================================================
+     LANGUAGE TOGGLE + ARABIC (RTL)
+     ============================================================ */
+  .lang-toggle {
+    font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .02em;
+    padding: 8px 14px; border-radius: var(--r-pill); border: 1px solid var(--line);
+    background: transparent; color: var(--ink-soft); cursor: pointer; flex: 0 0 auto;
+    transition: border-color .25s ease, color .25s ease, background .25s ease;
+  }
+  .lang-toggle:hover { border-color: var(--ink); color: var(--ink); background: rgba(20,18,16,.03); }
+
+  html[dir="rtl"] body { font-family: 'Tajawal', var(--sans); }
+  html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3,
+  html[dir="rtl"] .display, html[dir="rtl"] .in-title {
+    font-family: 'Cairo', 'Tajawal', sans-serif; font-weight: 700; letter-spacing: 0;
+  }
+  /* Arabic must not be letter-spaced / uppercased (breaks the script) */
+  html[dir="rtl"] .eyebrow, html[dir="rtl"] .kicker, html[dir="rtl"] .brand__name,
+  html[dir="rtl"] .brand__sub, html[dir="rtl"] .nav__links a, html[dir="rtl"] .stat__label,
+  html[dir="rtl"] .bcard__status, html[dir="rtl"] .pstep__num, html[dir="rtl"] .footer__col h4,
+  html[dir="rtl"] .bcard__tags span, html[dir="rtl"] .marquee__track span,
+  html[dir="rtl"] .il-name, html[dir="rtl"] .il-sub, html[dir="rtl"] .lang-toggle {
+    letter-spacing: normal; text-transform: none;
+  }
+  html[dir="rtl"] em { font-style: normal; }
+  html[dir="rtl"] .brand__text {
+    border-left: 0; border-right: 1px solid var(--line);
+    padding-left: 0; padding-right: 13px;
+  }
+  html[dir="rtl"] .intro__list li { text-align: right; }
+
   @media (prefers-reduced-motion: reduce) {
     .marquee__track { animation: none; }
     .reveal { opacity: 1; transform: none; }
@@ -592,7 +624,7 @@
       <span class="brand__mark"><img src="finalized%20logo.png" alt="Abdin Auto Seats Upholstery logo" /></span>
       <span class="brand__text">
         <span class="brand__name">Abdin</span>
-        <span class="brand__sub">Auto Seats&nbsp;Upholstery&nbsp;·&nbsp;L.L.C</span>
+        <span class="brand__sub" style="white-space:nowrap">Auto Seats Upholstery · L.L.C</span>
       </span>
     </a>
     <nav class="nav__links" aria-label="Primary">
@@ -602,6 +634,7 @@
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav__cta">
+      <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">العربية</button>
       <a class="wa-icon" href="https://wa.me/971556282836" target="_blank" rel="noopener" aria-label="Message ABDIN on WhatsApp">
         <svg class="wa-icon__glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0a12 12 0 0 0-10 18.5L0 24l5.7-1.9A12 12 0 1 0 12 0zm0 21.8a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.4 1 1-3.3-.2-.4A9.8 9.8 0 1 1 12 21.8zm5.4-7.3c-.3-.1-1.8-.9-2-1s-.5-.1-.7.2-.8 1-.9 1.1-.4.2-.7 0a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.6.3-.5a.5.5 0 0 0 0-.5L8.8 6.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3A2.9 2.9 0 0 0 6 9c0 1.8 1.3 3.5 1.5 3.7a14.5 14.5 0 0 0 5.5 4.9c2 .8 2 .5 2.4.5a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .2-1.2c-.1-.1-.3-.2-.6-.3z"/></svg>
       </a>
@@ -623,7 +656,7 @@
     <div class="hero__scrim" aria-hidden="true"></div>
     <div class="container hero__head">
       <span class="eyebrow reveal">Car Seats · Sofas · Headboards · Since 2009</span>
-      <h1 class="reveal d1">Worn out.<br/><em>Re-made</em> by hand.</h1>
+      <h1 class="reveal d1" data-ar="قديمٌ وبالٍ؟<br/><em>نُعيده</em> جديدًا باليد.">Worn out.<br/><em>Re-made</em> by hand.</h1>
       <p class="hero__sub reveal d2">We re-cover car seats, sofas and headboards — by hand, like new.</p>
       <div class="hero__actions reveal d3">
         <a href="#services" class="btn btn-primary">
@@ -677,7 +710,7 @@
     <div class="container">
       <div class="section-head">
         <span class="eyebrow reveal" style="justify-content:center">What we do</span>
-        <h2 class="reveal">Car seats, sofas &amp; headboards —<br/>made like new.</h2>
+        <h2 class="reveal" data-ar="مقاعد السيارات والكنب ومساند السرير —<br/>كالجديد تمامًا.">Car seats, sofas &amp; headboards —<br/>made like new.</h2>
         <p class="reveal">From a worn car seat to a tired sofa or a brand-new custom headboard — we strip it, re-pad it and re-cover it by hand, in our own workshop.</p>
       </div>
 
@@ -757,7 +790,7 @@
   <section class="process container" id="process">
     <div class="process__head reveal">
       <span class="eyebrow" style="justify-content:center">Simple &amp; honest</span>
-      <h2>From a photo to a finished interior —<br/>in three easy steps.</h2>
+      <h2 data-ar="من صورة إلى تنجيد مكتمل —<br/>في ثلاث خطوات سهلة.">From a photo to a finished interior —<br/>in three easy steps.</h2>
       <p>No showroom visit needed to begin. Message us, get an honest price, and we take care of the rest.</p>
     </div>
 
@@ -951,6 +984,104 @@
 
   /* ---------- year ---------- */
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------- bilingual: English / العربية (RTL) ---------- */
+  const I18N = {
+    "Our Craft":"حِرفتنا","Services":"خدماتنا","How it works":"كيف نعمل","Contact":"تواصل معنا",
+    "Abdin":"عبدين","Auto Seats Upholstery · L.L.C":"تنجيد مقاعد السيارات · ش.ذ.م.م",
+    "Car Seats · Sofas · Headboards · Since 2009":"مقاعد السيارات · الكنب · مساند السرير · منذ ٢٠٠٩",
+    "We re-cover car seats, sofas and headboards — by hand, like new.":"نُعيد تنجيد مقاعد السيارات والكنب ومساند السرير — يدويًا، كالجديد تمامًا.",
+    "See our work":"شاهد أعمالنا","Get a price":"اطلب السعر",
+    "Years of craft":"سنوات من الخبرة","Interiors restored":"قطعة تم تجديدها","Hand-finished":"صناعة يدوية","Scroll":"اسحب للأسفل",
+    "Automotive Interiors":"تنجيد السيارات","Leather & Vinyl":"جلد وفينيل","Sofa Re-Covering":"إعادة تنجيد الكنب",
+    "Custom Headboards":"مساند سرير مُفصّلة","Foam Replacement":"تبديل الإسفنج","Marine & Yacht":"القوارب واليخوت",
+    "The ABDIN difference":"ما يُميّز عبدين",
+    "Stripped, re-padded, re-trimmed — all by hand.":"نُزيل القديم، نُعيد الحشو، ونُجدّد التنجيد — كله باليد.",
+    "From a single worn car seat to a full living-room re-cover, ABDIN restores comfort and character with hand-cut leather, precise stitching and a finish built to outlast the original.":"من مقعد سيارة واحد بالٍ إلى إعادة تنجيد غرفة معيشة كاملة، تُعيد عبدين الراحة والأناقة بجلدٍ مقصوص يدويًا وخياطةٍ دقيقة وتشطيبٍ يدوم أطول من الأصل.",
+    "We don't simply slip a cover over the problem. Each piece is stripped, re-padded and re-trimmed so it looks — and feels — better than the day it left the showroom. The same hands that re-trim a luxury car seat in the morning re-cover a family sofa in the afternoon.":"نحن لا نضع غطاءً فوق المشكلة فحسب. كل قطعة تُجرَّد وتُعاد حشوتها وتُجدَّد ليصبح مظهرها وملمسها أفضل من يوم خروجها من المعرض. اليد نفسها التي تُجدّد مقعد سيارة فاخرة صباحًا تُعيد تنجيد كنبة العائلة مساءً.",
+    "Genuine leather, Alcantara & premium vinyl sourcing":"جلد طبيعي وألكانتارا وفينيل فاخر",
+    "Colour-matched thread & OEM-pattern stitching":"خيوط مطابقة للّون وخياطة بنفس النمط الأصلي",
+    "Foam re-build for support that actually lasts":"إعادة بناء الإسفنج لدعمٍ وراحةٍ يدومان",
+    "Hand-stitched":"خياطة يدوية","Every seam, in-house":"كل غُرزة في ورشتنا",
+    "What we do":"ماذا نُقدّم",
+    "From a worn car seat to a tired sofa or a brand-new custom headboard — we strip it, re-pad it and re-cover it by hand, in our own workshop.":"من مقعد سيارة بالٍ إلى كنبةٍ متعبة أو مسند سرير جديد بالكامل — نُجرّده ونُعيد حشوه ونُعيد تنجيده يدويًا في ورشتنا الخاصة.",
+    "Signature":"الأبرز","Automotive Seat Upholstery":"تنجيد مقاعد السيارات",
+    "Full re-trims, single-seat repairs, steering wheels and headliners — in leather, Alcantara or vinyl, finished to OEM patterns.":"تنجيد كامل، وإصلاح مقعد واحد، وعجلات القيادة وسقف السيارة — بالجلد أو الألكانتارا أو الفينيل، بنفس نمط المصنع.",
+    "Popular":"الأكثر طلبًا",
+    "Tufted, panelled or wrap-around headboards, built to your bed size and fabric.":"مساند سرير كابيتونيه أو بألواح أو محيطة، مصنوعة حسب مقاس سريرك وقماشك.",
+    "Restore":"تجديد",
+    "Bring tired sofas and chairs back to life with new foam, springs and fabric.":"أعِد الحياة للكنب والكراسي المتعبة بإسفنجٍ وزنبركاتٍ وقماشٍ جديد.",
+    "Residential":"للمنازل","Whole Sofa Sets & Majlis":"أطقم الكنب والمجالس",
+    "Living rooms, majlis seating and dining chairs re-covered as a set — colour-matched, foam-renewed and delivered ready to live in.":"غرف المعيشة وجلسات المجالس وكراسي الطعام تُعاد تنجيدها كطقمٍ متكامل — بألوانٍ متطابقة وإسفنجٍ مُجدَّد، وتُسلَّم جاهزةً للاستخدام.",
+    "On-site":"خدمة عندك","Pickup & Delivery":"استلام وتوصيل",
+    "We collect, restore and return across the city — no heavy lifting on you.":"نستلم القطعة ونُجدّدها ونُعيدها إليك في جميع أنحاء المدينة — دون أي عناء عليك.",
+    "Guaranteed":"مضمون","Workmanship Warranty":"ضمان على العمل",
+    "Every job backed in writing — stitching and finish we stand behind.":"كل عمل مضمون كتابيًا — خياطةٌ وتشطيبٌ نقف خلفهما.",
+    "Leather":"جلد","OEM-pattern":"نمط أصلي","Repairs":"إصلاحات","Tufted":"كابيتونيه","Made-to-size":"حسب المقاس",
+    "Re-foam":"تبديل إسفنج","Fabric":"أقمشة","Majlis":"مجالس","Sets":"أطقم","Colour-match":"تطابق الألوان","Doorstep":"حتى باب البيت","12-month":"١٢ شهرًا",
+    "Simple & honest":"بسيط وصادق",
+    "No showroom visit needed to begin. Message us, get an honest price, and we take care of the rest.":"لا حاجة لزيارة المعرض للبدء. راسلنا، واحصل على سعرٍ صادق، ونحن نتولّى الباقي.",
+    "Send a photo":"أرسل صورة",
+    "Message us on WhatsApp with a photo of your seats and a few details. It takes a minute.":"راسلنا على واتساب بصورة لمقاعدك وبعض التفاصيل. لن يستغرق الأمر سوى دقيقة.",
+    "Get a fixed price":"احصل على سعرٍ ثابت",
+    "We assess it honestly and send a clear, fixed quote — usually the same day. No surprises.":"نُقيّمها بصدق ونرسل لك عرض سعرٍ واضحًا وثابتًا — عادةً في نفس اليوم. دون مفاجآت.",
+    "We restore & return":"نُجدّده ونُعيده إليك",
+    "We collect, re-trim it by hand, and deliver it back looking and feeling better than new.":"نستلمها ونُعيد تنجيدها يدويًا، ونُعيدها إليك بمظهرٍ وملمسٍ أفضل من الجديد.",
+    "Send a photo on WhatsApp":"أرسل صورة عبر واتساب",
+    "Let's begin":"لنبدأ","Ready to give it a second life?":"جاهزٌ لتمنحه حياةً جديدة؟",
+    "Send us a photo and a few details. We'll come back with an honest assessment and a fixed quote — usually the same day.":"أرسل لنا صورة وبعض التفاصيل. سنعود إليك بتقييمٍ صادق وسعرٍ ثابت — عادةً في نفس اليوم.",
+    "Get directions":"اعرف الطريق إلينا",
+    "ABDIN Auto Seats Upholstery L.L.C — bespoke automotive and home upholstery, hand-finished by master craftsmen.":"عبدين لتنجيد مقاعد السيارات ش.ذ.م.م — تنجيد سيارات ومنازل حسب الطلب، بلمسةٍ يدوية من حرفيين مهرة.",
+    "Car Seat Upholstery":"تنجيد مقاعد السيارات","Company":"عن عبدين","Clients":"عملاؤنا","Get a Quote":"اطلب عرض سعر","Workshop":"الورشة",
+    "Visit":"زورونا","Get directions ↗":"اعرف الطريق ↗","Social":"تابعنا",
+    "Hand-finished upholstery · Pickup & delivery available":"تنجيد يدوي · خدمة الاستلام والتوصيل متوفرة",
+    "ABDIN Auto Seats Upholstery L.L.C. All rights reserved.":"عبدين لتنجيد مقاعد السيارات ش.ذ.م.م. جميع الحقوق محفوظة.",
+    "Privacy":"الخصوصية","Terms":"الشروط"
+  };
+
+  (function () {
+    const btn = document.getElementById('langToggle');
+    if (!btn) return;
+    const root = document.documentElement;
+    let nodes = null;
+    function collect() {
+      nodes = [];
+      const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode(n) {
+          if (!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          const p = n.parentElement;
+          if (!p || p.closest('script,style,[data-ar],#langToggle,.intro-loader')) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      let n; while ((n = w.nextNode())) nodes.push({ node: n, en: n.nodeValue });
+    }
+    function apply(lang) {
+      if (!nodes) collect();
+      const ar = lang === 'ar';
+      root.lang = ar ? 'ar' : 'en';
+      root.dir = ar ? 'rtl' : 'ltr';
+      document.querySelectorAll('[data-ar]').forEach(el => {
+        if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+        el.innerHTML = ar ? el.getAttribute('data-ar') : el.dataset.en;
+      });
+      nodes.forEach(({ node, en }) => {
+        if (ar) {
+          const key = en.trim().replace(/ /g, ' ');
+          const tr = I18N[key];
+          node.nodeValue = tr ? en.replace(en.trim(), tr) : en;
+        } else {
+          node.nodeValue = en;
+        }
+      });
+      btn.textContent = ar ? 'English' : 'العربية';
+      try { localStorage.setItem('abdinLang', lang); } catch (e) {}
+    }
+    btn.addEventListener('click', () => apply(root.dir === 'rtl' ? 'en' : 'ar'));
+    let saved = 'en';
+    try { saved = localStorage.getItem('abdinLang') || 'en'; } catch (e) {}
+    if (saved === 'ar') apply('ar'); else btn.textContent = 'العربية';
+  })();
 </script>
 </body>
 </html>
