@@ -377,18 +377,33 @@
   }
   .intro-loader.done { opacity: 0; visibility: hidden; }
   .intro-loader__inner { display: flex; flex-direction: column; align-items: center; gap: 30px; }
-  .intro-logo {
-    width: clamp(160px, 32vw, 250px); height: auto;
-    /* black line-art logo → render it light on the dark intro, with a soft accent glow */
-    filter: brightness(0) invert(1) drop-shadow(0 0 18px rgba(216,171,126,.5));
-    clip-path: inset(0 0 100% 0); opacity: 0;
-    animation: logoReveal 1.8s var(--ease) .3s forwards;
+  .car { width: clamp(230px, 52vw, 380px); height: auto; color: var(--accent-soft); overflow: visible; }
+  .car-line {
+    fill: none; stroke: currentColor; stroke-width: 2.4;
+    stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 1; stroke-dashoffset: 1;
+    filter: drop-shadow(0 0 5px rgba(216,171,126,.45));
   }
-  @keyframes logoReveal {
-    0% { clip-path: inset(0 0 100% 0); opacity: 0; }
-    22% { opacity: 1; }
-    100% { clip-path: inset(0 0 0 0); opacity: 1; }
+  .car-body  { animation: carDraw 1.7s var(--ease) .25s forwards; }
+  .car-wheel { animation: carDraw .8s var(--ease) 1.15s forwards; }
+  .car-belt  { stroke-width: 1.6; opacity: .7; animation: carDraw .6s var(--ease) 1.45s forwards; }
+  .car-hub   { fill: var(--accent-soft); opacity: 0; animation: carFade .5s var(--ease) 1.7s forwards; }
+  .car-head  { fill: #ffe7c2; opacity: 0; filter: drop-shadow(0 0 8px #ffd28a); animation: carHead .9s var(--ease) 1.75s forwards; }
+  .car-shadow{ fill: rgba(216,171,126,.16); filter: blur(7px); opacity: 0; animation: carFade .9s ease 1.5s forwards; }
+  .car-shine {
+    fill: none; stroke: #fff6e8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 0.07 0.93; stroke-dashoffset: 1; opacity: 0;
+    filter: drop-shadow(0 0 6px #fff);
+    animation: carShine 1.5s linear 1.95s forwards;
   }
+  .intro-name { text-align: center; opacity: 0; animation: nameUp .9s var(--ease) 2.15s forwards; }
+  .in-title { display: block; font-family: var(--display); font-weight: 500; font-size: clamp(30px, 6vw, 50px); letter-spacing: .16em; color: var(--paper); }
+  .in-sub { display: block; margin-top: 8px; font-size: 11px; letter-spacing: .34em; text-transform: uppercase; color: var(--accent-soft); }
+  @keyframes carDraw { to { stroke-dashoffset: 0; } }
+  @keyframes carFade { to { opacity: 1; } }
+  @keyframes carHead { 0% { opacity: 0; } 45% { opacity: 1; } 100% { opacity: .92; } }
+  @keyframes carShine { 0% { opacity: 0; stroke-dashoffset: 1; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; stroke-dashoffset: 0; } }
+  @keyframes nameUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
   .intro-loader__brand { text-align: center; color: var(--paper); opacity: 0; animation: ilFade 1s var(--ease) .75s both; }
   .il-name { display: block; font-family: var(--display); font-weight: 500; font-size: clamp(32px, 6vw, 54px); letter-spacing: .14em; }
   .il-sub { display: block; margin-top: 10px; font-size: 11px; letter-spacing: .34em; text-transform: uppercase; color: var(--accent-soft); }
@@ -517,7 +532,10 @@
     .hero__cue span { animation: none; }
     .wa-cta__ring::before,
     .wa-icon::before, .wa-icon::after { animation: none; }
-    .intro-logo { animation: none; clip-path: none; opacity: 1; }
+    .car-line { animation: none; stroke-dashoffset: 0; }
+    .car-shine { animation: none; opacity: 0; }
+    .car-head, .car-hub, .car-shadow { animation: none; opacity: 1; }
+    .intro-name { animation: none; opacity: 1; }
     .brand img, .footer__brand img { animation: none; filter: drop-shadow(0 0 8px rgba(216,171,126,.5)); }
     * { scroll-behavior: auto; }
   }
@@ -528,7 +546,21 @@
 <!-- ====================== INTRO LOADER (car seat draws in) ====================== -->
 <div class="intro-loader" id="introLoader" role="presentation">
   <div class="intro-loader__inner">
-    <img class="intro-logo" src="finalized%20logo.png" alt="ABDIN Auto Seats Upholstery L.L.C" />
+    <svg class="car" viewBox="0 0 400 200" fill="none" aria-hidden="true">
+      <ellipse class="car-shadow" cx="200" cy="181" rx="150" ry="9"/>
+      <path class="car-line car-body" pathLength="1" d="M46 150 L40 134 Q40 120 58 116 L118 110 Q134 108 148 94 L176 72 Q182 68 194 68 L250 68 Q266 68 276 82 L298 110 L342 114 Q358 116 358 130 L354 150 Z"/>
+      <path class="car-line car-belt" pathLength="1" d="M150 96 L296 110"/>
+      <circle class="car-line car-wheel" pathLength="1" cx="116" cy="150" r="26"/>
+      <circle class="car-line car-wheel" pathLength="1" cx="300" cy="150" r="26"/>
+      <circle class="car-hub" cx="116" cy="150" r="7"/>
+      <circle class="car-hub" cx="300" cy="150" r="7"/>
+      <circle class="car-head" cx="52" cy="126" r="4.5"/>
+      <path class="car-shine" pathLength="1" d="M46 150 L40 134 Q40 120 58 116 L118 110 Q134 108 148 94 L176 72 Q182 68 194 68 L250 68 Q266 68 276 82 L298 110 L342 114 Q358 116 358 130 L354 150 Z"/>
+    </svg>
+    <div class="intro-name">
+      <span class="in-title">ABDIN</span>
+      <span class="in-sub">Auto Seats · Upholstery</span>
+    </div>
   </div>
 </div>
 
@@ -918,7 +950,7 @@
       setTimeout(() => loader.remove(), 850);
     };
     let done = false;
-    const run = () => { if (done) return; done = true; setTimeout(finish, reduce ? 500 : 2700); };
+    const run = () => { if (done) return; done = true; setTimeout(finish, reduce ? 500 : 3100); };
     if (document.readyState === 'complete') run(); else window.addEventListener('load', run);
     setTimeout(run, 4500); // safety net
   })();
