@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ABDIN — Auto Seats &amp; Upholstery</title>
+<meta name="description" content="ABDIN Auto Seats Upholstery L.L.C — bespoke automotive interiors, headboards and sofa re-upholstery, hand-finished by master craftsmen." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ============================================================
+     DESIGN TOKENS — one system for the whole site
+     ============================================================ */
+  :root {
+    /* color */
+    --ink:        #141210;
+    --ink-soft:   #3d3833;
+    --muted:      #7a7167;
+    --line:       #e4ddd1;
+    --paper:      #f5f1ea;
+    --paper-2:    #efe9df;
+    --card:       #fbf8f3;
+    --white:      #ffffff;
+    --accent:     #a9714b;   /* cognac leather */
+    --accent-deep:#8a5a39;
+    --accent-soft:#d8ab7e;
+
+    /* type */
+    --display: "Fraunces", Georgia, serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    /* radius */
+    --r-sm: 10px;
+    --r-md: 16px;
+    --r-lg: 24px;
+    --r-pill: 999px;
+
+    /* depth */
+    --shadow-sm: 0 1px 2px rgba(20,18,16,.04), 0 2px 8px rgba(20,18,16,.05);
+    --shadow-md: 0 8px 24px rgba(20,18,16,.08), 0 2px 6px rgba(20,18,16,.05);
+    --shadow-lg: 0 24px 60px rgba(20,18,16,.16);
+
+    /* rhythm — 8px grid */
+    --container: 1200px;
+    --gutter: 24px;
+    --section-y: 120px;
+
+    /* motion system */
+    --ease: cubic-bezier(.22, 1, .36, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 500; letter-spacing: -.01em; line-height: 1.05; }
+
+  .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent-deep);
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--accent); display: inline-block; }
+
+  /* ---------- buttons (one standard) ---------- */
+  .btn {
+    --pad-y: 14px; --pad-x: 26px;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: var(--pad-y) var(--pad-x);
+    border-radius: var(--r-pill);
+    font-family: var(--sans); font-size: 15px; font-weight: 500;
+    letter-spacing: .01em;
+    cursor: pointer; border: 1px solid transparent;
+    transition: transform .25s ease, background .25s ease, color .25s ease, box-shadow .25s ease;
+    will-change: transform;
+  }
+  .btn svg { width: 16px; height: 16px; }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); background: #000; }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { transform: translateY(-2px); border-color: var(--ink); background: rgba(20,18,16,.03); }
+
+  /* ============================================================
+     NAV
+     ============================================================ */
+  .nav {
+    position: sticky; top: 0; z-index: 60;
+    backdrop-filter: saturate(1.4) blur(12px);
+    background: rgba(245,241,234,.72);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s ease, background .3s ease;
+    opacity: 0; animation: navIn .7s var(--ease) .1s forwards;
+  }
+  @keyframes navIn { to { opacity: 1; } }
+  .nav.scrolled { border-color: var(--line); background: rgba(245,241,234,.9); }
+  .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand img { width: 38px; height: 38px; object-fit: contain; }
+  .brand__name {
+    font-family: var(--sans); font-weight: 600; font-size: 15px;
+    letter-spacing: .34em; text-transform: uppercase;
+  }
+  .brand__sub { display:block; font-size: 8.5px; letter-spacing:.28em; color: var(--muted); margin-top: 2px; font-weight: 500; }
+  .nav__links { display: flex; align-items: center; gap: 36px; }
+  .nav__links a {
+    font-size: 14px; color: var(--ink-soft); font-weight: 500;
+    position: relative; transition: color .2s ease;
+  }
+  .nav__links a::after {
+    content:""; position:absolute; left:0; bottom:-6px; height:1px; width:0; background: var(--accent);
+    transition: width .25s ease;
+  }
+  .nav__links a:hover { color: var(--ink); }
+  .nav__links a:hover::after { width: 100%; }
+  .nav__cta { display: flex; align-items: center; gap: 16px; }
+  .nav__toggle { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
+  .nav__toggle span { display:block; width:22px; height:2px; background: var(--ink); margin:4px 0; transition:.3s; }
+
+  /* ============================================================
+     1 · HERO  (parallax)
+     ============================================================ */
+  .hero {
+    position: relative; min-height: 100vh; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; color: var(--paper); background: #0c0b0a;
+    padding: 120px 0 90px;
+  }
+  .hero__bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  /* the source clip is a landscape shot stored sideways — rotate it upright.
+     width/height are swapped (100vh / 100vw) so the rotated frame fills the screen. */
+  .hero__video {
+    position: absolute; top: 50%; left: 50%;
+    width: 100vh; height: 100vw; object-fit: cover;
+    transform: translate(-50%, -50%) rotate(-90deg) scale(1.08);
+    opacity: 0; will-change: transform, opacity;
+    transition: opacity 1.2s var(--ease), transform 1.4s var(--ease);
+  }
+  .hero__video.playing { opacity: 1; transform: translate(-50%, -50%) rotate(-90deg) scale(1); }
+  .hero__scrim {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to bottom, rgba(10,9,8,.5), rgba(10,9,8,.3) 38%, rgba(10,9,8,.9));
+  }
+  .hero__head { position: relative; z-index: 2; max-width: 880px; margin: 0 auto; }
+  .hero .eyebrow { color: var(--accent-soft); }
+  .hero .eyebrow::before { background: var(--accent-soft); }
+  .hero h1 {
+    font-size: clamp(46px, 7.4vw, 96px);
+    margin-top: 26px; letter-spacing: -.02em; color: var(--paper);
+  }
+  .hero h1 em { font-style: italic; color: var(--accent-soft); }
+  .hero__sub {
+    margin: 28px auto 0; max-width: 600px;
+    font-size: clamp(16px, 1.4vw, 19px); color: rgba(245,241,234,.86);
+  }
+  .hero__actions { margin-top: 40px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .hero .btn-primary { background: var(--paper); color: var(--ink); }
+  .hero .btn-primary:hover { background: #fff; }
+  .hero .btn-ghost { color: var(--paper); border-color: rgba(245,241,234,.35); }
+  .hero .btn-ghost:hover { border-color: var(--paper); background: rgba(255,255,255,.08); }
+
+  .hero__stats {
+    margin: 56px auto 0; display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat__num { font-family: var(--display); font-size: 38px; line-height: 1; color: var(--paper); }
+  .stat__num span { color: var(--accent-soft); }
+  .stat__label { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: rgba(245,241,234,.6); margin-top: 8px; }
+
+  .hero__cue {
+    position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 2;
+    color: rgba(245,241,234,.6); font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    display: flex; flex-direction: column; align-items: center; gap: 9px;
+  }
+  .hero__cue span { width: 1px; height: 34px; background: linear-gradient(rgba(245,241,234,.6), transparent); animation: cue 2.2s ease-in-out infinite; }
+  @keyframes cue { 0%,100%{ opacity:.3; transform: scaleY(.6);} 50%{ opacity:1; transform: scaleY(1);} }
+
+  /* parallax band */
+  .parallax { margin-top: 88px; padding-bottom: 40px; }
+  .prow { display: flex; gap: 22px; width: max-content; will-change: transform; }
+  .prow + .prow { margin-top: 22px; }
+  .pcard {
+    position: relative; flex: 0 0 auto;
+    width: 420px; height: 300px; border-radius: var(--r-md); overflow: hidden;
+    box-shadow: var(--shadow-md); background: var(--paper-2);
+  }
+  .pcard img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+  .pcard:hover img { transform: scale(1.05); }
+  .pcard__cap {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 22px 22px 18px;
+    background: linear-gradient(to top, rgba(20,18,16,.72), transparent);
+    color: var(--paper); opacity: 0; transform: translateY(8px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .pcard:hover .pcard__cap { opacity: 1; transform: none; }
+  .pcard__cap span { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+  .pcard__cap strong { display:block; font-family: var(--display); font-weight: 500; font-size: 20px; margin-top: 4px; }
+
+  /* ============================================================
+     MARQUEE trust strip
+     ============================================================ */
+  .marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--paper-2); overflow: hidden; }
+  .marquee__track { display: flex; gap: 64px; padding: 22px 0; width: max-content; animation: slide 32s linear infinite; }
+  .marquee__track span { font-family: var(--display); font-size: 20px; color: var(--muted); white-space: nowrap; display:flex; align-items:center; gap: 64px; }
+  .marquee__track span::after { content: "✦"; color: var(--accent); font-size: 12px; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  /* ============================================================
+     INTRO split
+     ============================================================ */
+  .intro { padding-block: var(--section-y); }
+  .intro__grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 72px; align-items: center; }
+  .intro__media { position: relative; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-lg); aspect-ratio: 4/5;
+    background: var(--paper-2) url('intro.jfif') center/cover no-repeat; }
+  .intro__media img { width: 100%; height: 100%; object-fit: cover; }
+  /* scroll-triggered craft video */
+  .intro__video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; will-change: transform, opacity;
+    transform: scale(1.05); transform-origin: center;
+    transition: opacity 1s var(--ease);
+  }
+  .intro__video.playing { opacity: 1; }
+  /* If the clip ever shows sideways on your device, uncomment these two lines:
+     .intro__video { transform: scale(1.05) rotate(90deg); }
+     and remove the JS scale line — but with this 9:16 file it should sit upright. */
+  .intro__media .tag {
+    position: absolute; left: 24px; bottom: 24px;
+    background: rgba(245,241,234,.92); backdrop-filter: blur(6px);
+    padding: 14px 20px; border-radius: var(--r-md); box-shadow: var(--shadow-sm);
+  }
+  .intro__media .tag b { font-family: var(--display); font-size: 22px; display:block; }
+  .intro__media .tag small { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .intro h2 { font-size: clamp(34px, 4vw, 52px); margin-top: 22px; }
+  .intro p { color: var(--ink-soft); margin-top: 22px; font-size: 17px; }
+  .intro__list { margin: 32px 0 0; padding: 0; list-style: none; display: grid; gap: 16px; }
+  .intro__list li { display: flex; gap: 14px; align-items: flex-start; font-size: 15.5px; color: var(--ink-soft); }
+  .intro__list svg { flex: 0 0 auto; width: 22px; height: 22px; color: var(--accent); margin-top: 1px; }
+
+  /* ============================================================
+     2 · FEATURE bento grid
+     ============================================================ */
+  .features { padding-block: var(--section-y); background: var(--paper-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .section-head { max-width: 640px; margin: 0 auto 56px; text-align: center; }
+  .section-head h2 { font-size: clamp(34px, 4.4vw, 56px); margin-top: 20px; }
+  .section-head p { color: var(--ink-soft); margin-top: 18px; font-size: 17px; }
+
+  .bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .bcard {
+    position: relative; overflow: hidden;
+    grid-column: span 1;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: 28px;
+    display: flex; flex-direction: column; min-height: 230px;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .bcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: #d8cfbf; }
+  .bcard--wide { grid-column: span 2; }
+  .bcard--img { padding: 0; color: var(--paper); justify-content: flex-end; min-height: 320px; }
+  .bcard--img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .bcard--img::after { content:""; position:absolute; inset:0; background: linear-gradient(to top, rgba(20,18,16,.82), rgba(20,18,16,.05) 60%); z-index: 1; }
+  .bcard--img .bcard__body { position: relative; z-index: 2; padding: 28px; }
+  .bcard__top { display: flex; align-items: center; justify-content: space-between; }
+  .bcard__icon {
+    width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+    background: rgba(169,113,75,.1); color: var(--accent-deep);
+  }
+  .bcard__icon svg { width: 22px; height: 22px; }
+  .bcard__status {
+    font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    padding: 6px 12px; border-radius: var(--r-pill);
+    background: rgba(20,18,16,.05); color: var(--ink-soft);
+  }
+  .bcard--img .bcard__status { background: rgba(255,255,255,.18); color: var(--paper); backdrop-filter: blur(4px); }
+  .bcard__body h3 { font-size: 23px; margin-top: 22px; }
+  .bcard--img .bcard__body h3 { margin-top: 0; }
+  .bcard__body p { font-size: 14.5px; color: var(--ink-soft); margin-top: 10px; }
+  .bcard--img .bcard__body p { color: rgba(245,241,234,.82); }
+  .bcard__tags { margin-top: auto; padding-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .bcard__tags span {
+    font-size: 12px; color: var(--muted);
+    padding: 5px 11px; border-radius: var(--r-sm); background: rgba(20,18,16,.04);
+  }
+  .bcard--img .bcard__tags span { background: rgba(255,255,255,.16); color: rgba(255,255,255,.85); }
+
+  /* ============================================================
+     3 · TESTIMONIALS  (shuffle cards)
+     ============================================================ */
+  .testimonials { padding-block: var(--section-y); overflow: hidden; }
+  .tst__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .tst__copy h2 { font-size: clamp(34px, 4.4vw, 54px); margin-top: 22px; }
+  .tst__copy p { color: var(--ink-soft); margin-top: 22px; font-size: 17px; max-width: 440px; }
+  .tst__hint { margin-top: 28px; font-size: 13px; letter-spacing: .04em; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+  .tst__hint svg { width: 18px; height: 18px; color: var(--accent); }
+
+  .tst__stage { position: relative; height: 460px; display: grid; place-items: center; }
+  .tcard {
+    position: absolute; width: 340px; height: 420px;
+    border-radius: var(--r-lg); background: var(--card);
+    border: 1px solid var(--line); box-shadow: var(--shadow-lg);
+    padding: 40px 34px; display: grid; place-content: center; gap: 22px; text-align: center;
+    user-select: none; touch-action: none;
+    transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease;
+  }
+  .tcard.dragging { transition: none; cursor: grabbing; }
+  .tcard__avatar { width: 76px; height: 76px; border-radius: 50%; margin: 0 auto; object-fit: cover; border: 2px solid var(--line); background: var(--paper-2); }
+  .tcard__quote { font-family: var(--display); font-style: italic; font-size: 19px; line-height: 1.5; color: var(--ink); }
+  .tcard__stars { color: var(--accent); letter-spacing: 3px; font-size: 14px; }
+  .tcard__author { font-size: 14px; }
+  .tcard__author b { display: block; letter-spacing: .02em; }
+  .tcard__author span { color: var(--muted); font-size: 13px; }
+
+  /* ============================================================
+     CTA band
+     ============================================================ */
+  .cta { padding-block: 96px; }
+  .cta__inner {
+    background: var(--ink); color: var(--paper);
+    border-radius: var(--r-lg); padding: 72px 56px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta__inner::before {
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(60% 120% at 50% 0%, rgba(169,113,75,.35), transparent 70%);
+  }
+  .cta__inner > * { position: relative; }
+  .cta h2 { font-size: clamp(32px, 4.4vw, 52px); color: var(--paper); }
+  .cta p { color: rgba(245,241,234,.7); margin: 18px auto 36px; max-width: 480px; font-size: 17px; }
+  .cta .btn-primary { background: var(--paper); color: var(--ink); }
+  .cta .btn-primary:hover { background: #fff; }
+  .cta .btn-ghost { color: var(--paper); border-color: rgba(245,241,234,.3); }
+  .cta .btn-ghost:hover { border-color: var(--paper); background: rgba(255,255,255,.06); }
+
+  /* ---------- glowing WhatsApp CTA (vanilla recreation of the animated glow) ---------- */
+  .wa-cta {
+    position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 17px 32px; border-radius: var(--r-pill);
+    background: transparent; color: #eafff3;
+    font-family: var(--sans); font-weight: 600; font-size: 17px; letter-spacing: .01em;
+    text-decoration: none; isolation: isolate;
+    box-shadow: 0 8px 30px rgba(37,211,102,.18);
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .wa-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 42px rgba(37,211,102,.36); }
+  /* soft rotating outer glow */
+  .wa-cta__halo {
+    position: absolute; left: 50%; top: 50%; width: 240%; aspect-ratio: 1; translate: -50% -50%;
+    z-index: 0; pointer-events: none; border-radius: 50%; filter: blur(15px); opacity: .6;
+    background: conic-gradient(from 0deg, transparent 0 46%, #0c6b39 56%, #25d366 72%, #8effc4 80%, #25d366 88%, transparent 100%);
+    animation: waSpin 4.5s linear infinite;
+  }
+  /* crisp rotating border ring (clipped to the pill) */
+  .wa-cta__ring { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; z-index: 1; }
+  .wa-cta__ring::before {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 280%; aspect-ratio: 1; translate: -50% -50%;
+    background: conic-gradient(from 0deg, transparent 0 50%, #0c6b39 60%, #25d366 74%, #c7ffe3 82%, #25d366 90%, transparent 100%);
+    animation: waSpin 4.5s linear infinite;
+  }
+  .wa-cta::after { content: ""; position: absolute; inset: 2px; border-radius: inherit; background: #07140d; z-index: 2; }
+  .wa-cta__inner { position: relative; z-index: 3; display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; }
+  .wa-cta__inner svg { width: 22px; height: 22px; fill: #25d366; flex: 0 0 auto; }
+  .wa-cta:hover .wa-cta__halo, .wa-cta:hover .wa-cta__ring::before { animation-duration: 2s; }
+  @keyframes waSpin { to { rotate: 360deg; } }
+
+  /* ---------- steering-wheel intro loader (first visit of the session) ---------- */
+  .intro-loader {
+    position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
+    background: #0c0b0a; transition: opacity .8s var(--ease), visibility .8s;
+  }
+  .intro-loader.done { opacity: 0; visibility: hidden; }
+  .intro-loader__inner { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+  .wheel {
+    width: clamp(98px, 18vw, 152px); height: auto; color: var(--accent-soft);
+    transform-origin: 50% 50%;
+    filter: drop-shadow(0 0 18px rgba(216,171,126,.45));
+    animation: wheelIn 1.3s var(--ease) both, wheelSpin 9s linear 1.3s infinite;
+  }
+  @keyframes wheelIn { from { opacity: 0; transform: rotate(-75deg) scale(.7); } to { opacity: 1; transform: rotate(0deg) scale(1); } }
+  @keyframes wheelSpin { to { transform: rotate(360deg); } }
+  .intro-loader__brand { text-align: center; color: var(--paper); opacity: 0; animation: ilFade 1s var(--ease) .75s both; }
+  .il-name { display: block; font-family: var(--display); font-weight: 500; font-size: clamp(32px, 6vw, 54px); letter-spacing: .14em; }
+  .il-sub { display: block; margin-top: 10px; font-size: 11px; letter-spacing: .34em; text-transform: uppercase; color: var(--accent-soft); }
+  @keyframes ilFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- always-on logo glow (desktop + mobile) ---------- */
+  .brand img, .footer__brand img { animation: logoGlow 3.4s ease-in-out infinite; }
+  @keyframes logoGlow {
+    0%, 100% { filter: drop-shadow(0 0 4px rgba(216,171,126,.35)); }
+    50% { filter: drop-shadow(0 0 12px rgba(216,171,126,.75)) drop-shadow(0 0 22px rgba(169,113,75,.45)); }
+  }
+
+  /* ============================================================
+     4 · FOOTER
+     ============================================================ */
+  .footer { background: var(--paper-2); border-top: 1px solid var(--line); padding-top: 72px; }
+  .footer__grid { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 40px; }
+  .footer__brand img { width: 44px; height: 44px; object-fit: contain; }
+  .footer__brand p { color: var(--muted); font-size: 14px; margin-top: 20px; max-width: 260px; }
+  .footer__col h4 { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
+  .footer__col ul { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 12px; }
+  .footer__col a { font-size: 14.5px; color: var(--ink-soft); transition: color .2s ease; display: inline-flex; align-items: center; gap: 8px; }
+  .footer__col a:hover { color: var(--accent-deep); }
+  .footer__col a svg { width: 16px; height: 16px; }
+  .footer__bottom {
+    margin-top: 64px; padding: 28px 0; border-top: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    font-size: 13.5px; color: var(--muted);
+  }
+  .footer__bottom a:hover { color: var(--ink); }
+
+  /* ============================================================
+     reveal-on-scroll
+     ============================================================ */
+  .reveal { opacity: 0; transform: translateY(60px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: .09s; }
+  .reveal.d2 { transition-delay: .18s; }
+  .reveal.d3 { transition-delay: .27s; }
+  .reveal.d4 { transition-delay: .36s; }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 980px) {
+    :root { --section-y: 80px; }
+    .nav__links, .nav__cta .btn { display: none; }
+    .nav__toggle { display: block; }
+    .nav.open .nav__links {
+      display: flex; flex-direction: column; gap: 20px;
+      position: absolute; top: 76px; left: 0; right: 0;
+      background: var(--paper); border-bottom: 1px solid var(--line);
+      padding: 28px var(--gutter);
+    }
+    .intro__grid, .tst__grid { grid-template-columns: 1fr; gap: 40px; }
+    .intro__media { aspect-ratio: 16/12; max-height: 460px; }
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .bcard--wide { grid-column: span 2; }
+    .footer__grid { grid-template-columns: 1fr 1fr; }
+    .footer__brand { grid-column: 1 / -1; }
+    .tst__stage { height: 480px; }
+  }
+  @media (max-width: 560px) {
+    .pcard { width: 280px; height: 210px; }
+    .bento { grid-template-columns: 1fr; }
+    .bcard--wide { grid-column: span 1; }
+    .footer__grid { grid-template-columns: 1fr; }
+    .hero__stats { gap: 32px; }
+    .cta__inner { padding: 48px 24px; }
+    .hero__actions .btn, .wa-cta { width: 100%; justify-content: center; }
+    .wa-cta__inner { font-size: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track { animation: none; }
+    .reveal { opacity: 1; transform: none; }
+    .nav { opacity: 1; animation: none; }
+    .intro__video { opacity: 1; transform: none; transition: none; }
+    .hero__video { opacity: 1; transition: none; transform: translate(-50%, -50%) rotate(-90deg) scale(1); }
+    .hero__cue span { animation: none; }
+    .wa-cta__halo, .wa-cta__ring::before { animation: none; }
+    .wheel { animation: none; opacity: 1; }
+    .intro-loader__brand { animation: none; opacity: 1; }
+    .brand img, .footer__brand img { animation: none; filter: drop-shadow(0 0 8px rgba(216,171,126,.5)); }
+    * { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====================== INTRO LOADER (steering wheel) ====================== -->
+<div class="intro-loader" id="introLoader" role="presentation">
+  <div class="intro-loader__inner">
+    <svg class="wheel" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" aria-hidden="true">
+      <circle cx="100" cy="100" r="86"/>
+      <circle cx="100" cy="100" r="34"/>
+      <circle cx="100" cy="100" r="13" fill="currentColor" stroke="none"/>
+      <line x1="133" y1="100" x2="186" y2="100"/>
+      <line x1="67" y1="100" x2="14" y2="100"/>
+      <line x1="100" y1="133" x2="100" y2="186"/>
+    </svg>
+    <div class="intro-loader__brand">
+      <span class="il-name">ABDIN</span>
+      <span class="il-sub">Auto Seats · Upholstery · L.L.C</span>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== NAV ====================== -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a class="brand" href="#top" aria-label="ABDIN home">
+      <img src="finalized%20logo.png" alt="ABDIN logo" />
+      <span>
+        <span class="brand__name">ABDIN</span>
+        <span class="brand__sub">Auto Seats · Upholstery</span>
+      </span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#work">Our Craft</a>
+      <a href="#services">Services</a>
+      <a href="#testimonials">Clients</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="#contact" class="btn btn-primary">
+        Book a fitting
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <button class="nav__toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ====================== 1 · HERO ====================== -->
+  <section class="hero" id="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <video class="hero__video" id="heroVideo"
+             src="assets/videos/craft.mp4"
+             muted loop playsinline preload="auto"></video>
+    </div>
+    <div class="hero__scrim" aria-hidden="true"></div>
+    <div class="container hero__head">
+      <span class="eyebrow reveal">Bespoke upholstery · Est. since 2009</span>
+      <h1 class="reveal d1">Interiors, <em>re-made</em><br/>by hand.</h1>
+      <p class="hero__sub reveal d2">From a single worn car seat to a full living-room re-cover, ABDIN restores comfort and character with hand-cut leather, precise stitching and a finish built to outlast the original.</p>
+      <div class="hero__actions reveal d3">
+        <a href="#services" class="btn btn-primary">
+          Explore our work
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#contact" class="btn btn-ghost">Request a quote</a>
+      </div>
+
+      <div class="hero__stats reveal">
+        <div class="stat"><div class="stat__num">15<span>+</span></div><div class="stat__label">Years of craft</div></div>
+        <div class="stat"><div class="stat__num">6k<span>+</span></div><div class="stat__label">Interiors restored</div></div>
+        <div class="stat"><div class="stat__num">100<span>%</span></div><div class="stat__label">Hand-finished</div></div>
+      </div>
+    </div>
+
+    <div class="hero__cue" aria-hidden="true">Scroll<span></span></div>
+  </section>
+
+  <!-- ====================== MARQUEE ====================== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>Automotive Interiors</span><span>Leather &amp; Vinyl</span><span>Sofa Re-Upholstery</span><span>Custom Headboards</span><span>Foam Replacement</span><span>Marine &amp; Yacht</span>
+      <span>Automotive Interiors</span><span>Leather &amp; Vinyl</span><span>Sofa Re-Upholstery</span><span>Custom Headboards</span><span>Foam Replacement</span><span>Marine &amp; Yacht</span>
+    </div>
+  </div>
+
+  <!-- ====================== INTRO ====================== -->
+  <section class="intro container" id="work">
+    <div class="intro__grid">
+      <div class="intro__media reveal">
+        <img src="intro.jfif" alt="ABDIN craftsman hand-stitching an upholstered panel" loading="lazy" decoding="async" />
+        <div class="tag"><b>Hand-stitched</b><small>Every seam, in-house</small></div>
+      </div>
+      <div class="intro__copy">
+        <span class="eyebrow reveal">The ABDIN difference</span>
+        <h2 class="reveal">Old-world craft, fitted to modern interiors.</h2>
+        <p class="reveal">We don't simply slip a cover over the problem. Each piece is stripped, re-padded and re-trimmed so it looks — and feels — better than the day it left the showroom. The same hands that re-trim a luxury car seat in the morning re-cover a family sofa in the afternoon.</p>
+        <ul class="intro__list reveal">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Genuine leather, Alcantara &amp; premium vinyl sourcing</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Colour-matched thread &amp; OEM-pattern stitching</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Foam re-build for support that actually lasts</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== 2 · FEATURE BENTO ====================== -->
+  <section class="features" id="services">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow reveal" style="justify-content:center">What we do</span>
+        <h2 class="reveal">One workshop, every surface worth saving.</h2>
+        <p class="reveal">Automotive, residential and commercial upholstery — handled end to end by the same team, to the same standard.</p>
+      </div>
+
+      <div class="bento">
+        <!-- wide image hero card -->
+        <article class="bcard bcard--img bcard--wide reveal">
+          <img src="car%20seats.jfif" alt="Re-upholstered car seats" loading="lazy" decoding="async" />
+          <div class="bcard__body">
+            <div class="bcard__top"><span></span><span class="bcard__status">Signature</span></div>
+            <h3>Automotive Seat Upholstery</h3>
+            <p>Full re-trims, single-seat repairs, steering wheels and headliners — in leather, Alcantara or vinyl, finished to OEM patterns.</p>
+            <div class="bcard__tags"><span>#Leather</span><span>#OEM-pattern</span><span>#Repairs</span></div>
+          </div>
+        </article>
+
+        <article class="bcard reveal">
+          <div class="bcard__top">
+            <div class="bcard__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v6"/><path d="M5 18v2M19 18v2M3 14h18"/></svg></div>
+            <span class="bcard__status">Popular</span>
+          </div>
+          <div class="bcard__body">
+            <h3>Custom Headboards</h3>
+            <p>Tufted, panelled or wrap-around headboards built to your bed size and fabric.</p>
+          </div>
+          <div class="bcard__tags"><span>#Tufted</span><span>#Made-to-size</span></div>
+        </article>
+
+        <article class="bcard reveal">
+          <div class="bcard__top">
+            <div class="bcard__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3"/><path d="M2 13a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4H2zM5 17v2M19 17v2"/></svg></div>
+            <span class="bcard__status">Restore</span>
+          </div>
+          <div class="bcard__body">
+            <h3>Sofa Re-Covering</h3>
+            <p>Bring tired sofas and chairs back to life with new foam, springs and fabric.</p>
+          </div>
+          <div class="bcard__tags"><span>#Re-foam</span><span>#Fabric</span></div>
+        </article>
+
+        <!-- wide image card -->
+        <article class="bcard bcard--img bcard--wide reveal">
+          <img src="sofa%20covering.jfif" alt="Re-covered sofa" loading="lazy" decoding="async" />
+          <div class="bcard__body">
+            <div class="bcard__top"><span></span><span class="bcard__status">Residential</span></div>
+            <h3>Full Home &amp; Majlis Re-Upholstery</h3>
+            <p>Living rooms, majlis seating and dining chairs re-covered as a set — colour-matched, foam-renewed and delivered ready to live in.</p>
+            <div class="bcard__tags"><span>#Majlis</span><span>#Sets</span><span>#Colour-match</span></div>
+          </div>
+        </article>
+
+        <article class="bcard reveal">
+          <div class="bcard__top">
+            <div class="bcard__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m7 11 5-5 5 5M12 6v12"/><path d="M5 20h14"/></svg></div>
+            <span class="bcard__status">On-site</span>
+          </div>
+          <div class="bcard__body">
+            <h3>Pickup &amp; Delivery</h3>
+            <p>We collect, restore and return across the city — no heavy lifting on you.</p>
+          </div>
+          <div class="bcard__tags"><span>#Doorstep</span></div>
+        </article>
+
+        <article class="bcard reveal">
+          <div class="bcard__top">
+            <div class="bcard__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg></div>
+            <span class="bcard__status">Guaranteed</span>
+          </div>
+          <div class="bcard__body">
+            <h3>Workmanship Warranty</h3>
+            <p>Every job backed in writing — stitching and finish we stand behind.</p>
+          </div>
+          <div class="bcard__tags"><span>#12-month</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== 3 · TESTIMONIALS ====================== -->
+  <section class="testimonials container" id="testimonials">
+    <div class="tst__grid">
+      <div class="tst__copy">
+        <span class="eyebrow reveal">Word of mouth</span>
+        <h2 class="reveal">Trusted by drivers and families alike.</h2>
+        <p class="reveal">The work speaks for itself — but our clients are happy to as well. A few of the people who've trusted ABDIN with their interiors.</p>
+        <div class="tst__hint reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Drag a card aside to read the next one
+        </div>
+      </div>
+
+      <div class="tst__stage" id="tstStage" aria-label="Customer testimonials">
+        <!-- cards injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== CTA ====================== -->
+  <section class="cta container" id="contact">
+    <div class="cta__inner reveal">
+      <span class="eyebrow" style="justify-content:center; color:#d9b08c">Let's begin</span>
+      <h2>Ready to give it a second life?</h2>
+      <p>Send us a photo and a few details. We'll come back with an honest assessment and a fixed quote — usually the same day.</p>
+      <div class="hero__actions" style="margin-top:0">
+        <a class="wa-cta" href="https://wa.me/971556282836" target="_blank" rel="noopener"
+           aria-label="Message ABDIN on WhatsApp at +971 55 628 2836">
+          <span class="wa-cta__halo" aria-hidden="true"></span>
+          <span class="wa-cta__ring" aria-hidden="true"></span>
+          <span class="wa-cta__inner">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0a12 12 0 0 0-10 18.5L0 24l5.7-1.9A12 12 0 1 0 12 0zm0 21.8a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.4 1 1-3.3-.2-.4A9.8 9.8 0 1 1 12 21.8zm5.4-7.3c-.3-.1-1.8-.9-2-1s-.5-.1-.7.2-.8 1-.9 1.1-.4.2-.7 0a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.6.3-.5a.5.5 0 0 0 0-.5L8.8 6.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3A2.9 2.9 0 0 0 6 9c0 1.8 1.3 3.5 1.5 3.7a14.5 14.5 0 0 0 5.5 4.9c2 .8 2 .5 2.4.5a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .2-1.2c-.1-.1-.3-.2-.6-.3z"/></svg>
+            +971 55 628 2836
+          </span>
+        </a>
+        <a href="https://maps.app.goo.gl/av7DPMEX4VWqqBaz5" target="_blank" rel="noopener" class="btn btn-ghost">Get directions</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ====================== 4 · FOOTER ====================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="finalized%20logo.png" alt="ABDIN logo" />
+        <p>ABDIN Auto Seats Upholstery L.L.C — bespoke automotive and home upholstery, hand-finished by master craftsmen.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Car Seat Upholstery</a></li>
+          <li><a href="#services">Sofa Re-Covering</a></li>
+          <li><a href="#services">Custom Headboards</a></li>
+          <li><a href="#services">Foam Replacement</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#work">Our Craft</a></li>
+          <li><a href="#testimonials">Clients</a></li>
+          <li><a href="#contact">Get a Quote</a></li>
+          <li><a href="#hero">Workshop</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Visit</h4>
+        <ul>
+          <li><a href="#contact">Mon–Sat · 9–7</a></li>
+          <li><a href="https://wa.me/971556282836" target="_blank" rel="noopener">+971 55 628 2836</a></li>
+          <li><a href="https://maps.app.goo.gl/av7DPMEX4VWqqBaz5" target="_blank" rel="noopener">Get directions ↗</a></li>
+          <li><a href="mailto:hello@abdinupholstery.com">hello@abdinupholstery.com</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Social</h4>
+        <ul>
+          <li><a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 9H16l.5-3h-3V4.2c0-.8.3-1.2 1.4-1.2H16.5V.2C16.1.1 15 0 13.8 0 11.3 0 9.7 1.5 9.7 4v2H7v3h2.7v8h3.8V9z"/></svg> Facebook</a></li>
+          <li><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> Instagram</a></li>
+          <li><a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5V9h3zM6.5 7.5A1.75 1.75 0 1 1 8.3 5.7 1.75 1.75 0 0 1 6.5 7.5zM19 19h-3v-5.6c0-3.4-4-3.1-4 0V19h-3V9h3v1.8c1.4-2.6 7-2.8 7 2.5z"/></svg> LinkedIn</a></li>
+          <li><a href="https://wa.me/971556282836" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 0 0-10 18.5L0 24l5.7-1.9A12 12 0 1 0 12 0zm0 21.8a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.4 1 1-3.3-.2-.4A9.8 9.8 0 1 1 12 21.8zm5.4-7.3c-.3-.1-1.8-.9-2-1s-.5-.1-.7.2-.8 1-.9 1.1-.4.2-.7 0a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.6.3-.5a.5.5 0 0 0 0-.5L8.8 6.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3A2.9 2.9 0 0 0 6 9c0 1.8 1.3 3.5 1.5 3.7a14.5 14.5 0 0 0 5.5 4.9c2 .8 2 .5 2.4.5a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .2-1.2c-.1-.1-.3-.2-.6-.3z"/></svg> WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> ABDIN Auto Seats Upholstery L.L.C. All rights reserved.</span>
+      <span><a href="#">Privacy</a> · <a href="#">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ---------- nav state ---------- */
+  const nav = document.getElementById('nav');
+  const toggle = document.getElementById('navToggle');
+  toggle.addEventListener('click', () => nav.classList.toggle('open'));
+  document.querySelectorAll('.nav__links a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+  const onScrollNav = () => nav.classList.toggle('scrolled', window.scrollY > 12);
+  onScrollNav();
+
+  /* ---------- parallax band (component 1 intent) ---------- */
+  const rows = [...document.querySelectorAll('.prow')];
+  let ticking = false;
+  function parallax() {
+    const vh = window.innerHeight;
+    rows.forEach(row => {
+      const speed = parseFloat(row.dataset.speed);
+      const rect = row.getBoundingClientRect();
+      const progress = (vh - rect.top) / (vh + rect.height); // 0..1 through viewport
+      const shift = (progress - 0.5) * 2 * speed * 600;
+      row.style.transform = `translate3d(${shift}px,0,0)`;
+    });
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    onScrollNav();
+    if (!ticking) { requestAnimationFrame(parallax); ticking = true; }
+  }, { passive: true });
+  parallax();
+
+  /* ---------- reveal on scroll ---------- */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ---------- hero video: play while in view, pause when scrolled away ---------- */
+  const heroVideo = document.getElementById('heroVideo');
+  const heroSection = document.getElementById('hero');
+  if (heroVideo && heroSection) {
+    const vio = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          heroVideo.classList.add('playing');           // fade + scale-in (kept once shown)
+          const p = heroVideo.play(); if (p && p.catch) p.catch(() => {});
+        } else {
+          heroVideo.pause();
+        }
+      });
+    }, { threshold: 0.25 });
+    vio.observe(heroSection);
+  }
+
+  /* ---------- testimonials: draggable shuffle stack (component 3 intent) ---------- */
+  const testimonials = [
+    { quote: "They re-trimmed both front seats of my Land Cruiser in matched leather — you genuinely cannot tell it isn't factory.", name: "Khalid A.", role: "Toyota Land Cruiser owner", img: "https://i.pravatar.cc/160?img=12" },
+    { quote: "Our majlis looked brand new. New foam, new fabric, picked up and delivered. Faultless from start to finish.", name: "Mariam S.", role: "Homeowner, Al Barsha", img: "https://i.pravatar.cc/160?img=32" },
+    { quote: "A worn driver's seat bolster fixed in a day for a fair price. Honest people, proper craftsmanship.", name: "Devin R.", role: "Mercedes E-Class owner", img: "https://i.pravatar.cc/160?img=15" },
+  ];
+  const stage = document.getElementById('tstStage');
+  let order = testimonials.map((_, i) => i);
+
+  function layout() {
+    stage.innerHTML = '';
+    order.forEach((idx, pos) => {
+      const t = testimonials[idx];
+      const card = document.createElement('article');
+      card.className = 'tcard';
+      const depth = order.length - 1 - pos; // 0 = front
+      card.style.zIndex = String(10 + pos);
+      const rot = depth === 0 ? 0 : (depth % 2 === 0 ? 5 : -5) * depth;
+      const ty = depth * 14;
+      const sc = 1 - depth * 0.04;
+      card.style.transform = `translateY(${ty}px) rotate(${rot}deg) scale(${sc})`;
+      card.dataset.base = card.style.transform;
+      card.innerHTML = `
+        <img class="tcard__avatar" src="${t.img}" alt="${t.name}" />
+        <div class="tcard__stars">★★★★★</div>
+        <p class="tcard__quote">“${t.quote}”</p>
+        <div class="tcard__author"><b>${t.name}</b><span>${t.role}</span></div>`;
+      if (pos === order.length - 1) makeDraggable(card);
+      stage.appendChild(card);
+    });
+  }
+
+  function shuffle() { order.unshift(order.pop()); layout(); }
+
+  function makeDraggable(card) {
+    card.style.cursor = 'grab';
+    let startX = 0, dx = 0, active = false;
+    const down = (e) => {
+      active = true; startX = (e.touches ? e.touches[0].clientX : e.clientX);
+      card.classList.add('dragging');
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    };
+    const move = (e) => {
+      if (!active) return;
+      dx = (e.touches ? e.touches[0].clientX : e.clientX) - startX;
+      card.style.transform = `translateX(${dx}px) rotate(${dx * 0.04}deg)`;
+      card.style.opacity = String(Math.max(0, 1 - Math.abs(dx) / 420));
+    };
+    const up = () => {
+      active = false; card.classList.remove('dragging');
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      if (Math.abs(dx) > 130) { shuffle(); }
+      else { card.style.transform = card.dataset.base; card.style.opacity = '1'; }
+      dx = 0;
+    };
+    card.addEventListener('pointerdown', down);
+  }
+  layout();
+
+  /* ---------- steering-wheel intro (once per session, then reveal) ---------- */
+  (function () {
+    const loader = document.getElementById('introLoader');
+    if (!loader) return;
+    if (sessionStorage.getItem('abdinIntroSeen')) { loader.remove(); return; }
+    const root = document.documentElement;
+    root.style.overflow = 'hidden';
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finish = () => {
+      loader.classList.add('done');
+      root.style.overflow = '';
+      sessionStorage.setItem('abdinIntroSeen', '1');
+      setTimeout(() => loader.remove(), 850);
+    };
+    let done = false;
+    const run = () => { if (done) return; done = true; setTimeout(finish, reduce ? 500 : 2200); };
+    if (document.readyState === 'complete') run(); else window.addEventListener('load', run);
+    setTimeout(run, 4500); // safety net
+  })();
+
+  /* ---------- year ---------- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
