@@ -60,6 +60,8 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
   }
   img { display: block; max-width: 100%; }
   a { color: inherit; text-decoration: none; }
@@ -373,10 +375,11 @@
   /* ---------- car-seat intro loader: logo draws itself in (first visit of the session) ---------- */
   .intro-loader {
     position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
-    background: radial-gradient(circle at 50% 44%, rgba(216,171,126,.12), #0c0b0a 58%);
+    /* opaque base + a soft warm glow on top (NOT a transparent center) */
+    background: radial-gradient(circle at 50% 44%, rgba(216,171,126,.12), rgba(216,171,126,0) 55%), #0b0a09;
     transition: opacity .8s var(--ease), visibility .8s;
   }
-  .intro-loader.done { opacity: 0; visibility: hidden; }
+  .intro-loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
   .intro-loader__inner { display: flex; flex-direction: column; align-items: center; gap: 30px; }
   .car { width: clamp(230px, 52vw, 380px); height: auto; color: var(--accent-soft); overflow: visible; }
   .car-line {
@@ -866,6 +869,10 @@
     heroVideo.addEventListener('loadeddata', show);
     heroVideo.addEventListener('playing', show);
     tryPlay();                                               // kick playback on mobile too
+    setTimeout(show, 1200);                                  // reveal the frame even if autoplay is deferred
+    // some mobiles only allow playback after a first interaction — catch it once
+    ['touchstart', 'click', 'scroll'].forEach(ev =>
+      window.addEventListener(ev, tryPlay, { once: true, passive: true }));
     const vio = new IntersectionObserver((entries) => {
       entries.forEach(en => {
         if (en.isIntersecting) { show(); tryPlay(); }
